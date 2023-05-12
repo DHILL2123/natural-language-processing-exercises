@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import os
 import pandas as pd
 import re
+from env import user, password, host, db, protocol
 
 def get_blog_articles_data(refresh=False):
     
@@ -78,3 +79,13 @@ def get_news_articles_data(refresh=False):
         inshorts_article_df.to_csv('news_articles.csv', index=False)
                 
     return pd.read_csv('news_articles.csv')
+
+
+
+def get_db_url(database, host=host, user=user, password=password):
+    return f'mysql+pymysql://{user}:{password}@{host}/{database}'
+
+url = get_db_url("spam_db")
+sql = "SELECT * FROM spam"
+
+df = pd.read_sql(sql, url, index_col="id")
